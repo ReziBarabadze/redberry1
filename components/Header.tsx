@@ -6,6 +6,7 @@ const Header = () => {
   return (
     <Box
       sx={{
+        backgroundColor: "#ffff",
         height: "100px",
         display: "flex",
         alignItems: "center",
@@ -14,6 +15,7 @@ const Header = () => {
         position: "fixed",
         top: 0,
         width: "100%",
+        zIndex: 10,
         boxSizing: "border-box",
       }}
     >

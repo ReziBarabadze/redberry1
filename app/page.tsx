@@ -1,8 +1,13 @@
 import { Box } from "@mui/material";
 import React from "react";
+import TaskPage from "./taskpage/page";
 
-const page = () => {
-  return <Box sx={{ paddingTop: "100px" }}>page</Box>;
+const Home = () => {
+  return (
+    <Box>
+      <TaskPage />
+    </Box>
+  );
 };
 
-export default page;
+export default Home;
