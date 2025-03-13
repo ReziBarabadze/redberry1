@@ -143,67 +143,6 @@ const TaskPage = () => {
             </Typography>
           </Box>
         ))}
-
-        {/* <Box>
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "FiraGO",
-              fontWeight: 500,
-              fontSize: "20px",
-              color: "#fff",
-              cursor: "pointer",
-              width: "300px",
-              height: "54px",
-              backgroundColor: " #FB5607",
-              borderRadius: "10px",
-            }}
-          >
-            პროგრესში
-          </Typography>
-        </Box>
-        <Box>
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "FiraGO",
-              fontWeight: 500,
-              fontSize: "20px",
-              color: "#fff",
-              cursor: "pointer",
-              width: "300px",
-              height: "54px",
-              backgroundColor: " #FF006E",
-              borderRadius: "10px",
-            }}
-          >
-            მზად ტესტირებისთვის
-          </Typography>
-        </Box>
-        <Box>
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "FiraGO",
-              fontWeight: 500,
-              fontSize: "20px",
-              color: "#fff",
-              cursor: "pointer",
-              width: "300px",
-              height: "54px",
-              backgroundColor: " #3A86FF",
-              borderRadius: "10px",
-            }}
-          >
-            დასრულებული
-          </Typography>
-        </Box> */}
       </Box>
     </Box>
   );
