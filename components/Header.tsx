@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
@@ -19,21 +20,23 @@ const Header = () => {
         boxSizing: "border-box",
       }}
     >
-      <Box sx={{ display: "flex", cursor: "pointer" }}>
-        <Typography
-          sx={{
-            fontFamily: "Fredoka One",
-            fontWeight: 400,
-            fontSize: "31px",
-            lineHeight: "100%",
-            color: "#8338EC",
-            marginRight: "4px",
-          }}
-        >
-          Momentum
-        </Typography>
-        <Image src="images/Hourglass.svg" alt="icon" width={38} height={38} />
-      </Box>
+      <Link href="/taskpage" style={{ textDecoration: "none" }}>
+        <Box sx={{ display: "flex", cursor: "pointer" }}>
+          <Typography
+            sx={{
+              fontFamily: "Fredoka One",
+              fontWeight: 400,
+              fontSize: "31px",
+              lineHeight: "100%",
+              color: "#8338EC",
+              marginRight: "4px",
+            }}
+          >
+            Momentum
+          </Typography>
+          <Image src="images/Hourglass.svg" alt="icon" width={38} height={38} />
+        </Box>
+      </Link>
       <Box sx={{ display: "flex", gap: "40px" }}>
         <Button
           sx={{
@@ -50,21 +53,23 @@ const Header = () => {
         >
           თანამშრომლის შექმნა
         </Button>
-        <Button
-          sx={{
-            fontFamily: "FiraGO",
-            fontWeight: 400,
-            fontSize: "16px",
-            lineHeight: "100%",
-            color: "#FFFFFF",
-            backgroundColor: "#8338EC",
-            width: "268px",
-            height: "40px",
-          }}
-        >
-          <span style={{ fontSize: "20px", marginRight: "4px" }}>+</span>{" "}
-          შექმენი ახალი დავალება
-        </Button>
+        <Link href="/createtask">
+          <Button
+            sx={{
+              fontFamily: "FiraGO",
+              fontWeight: 400,
+              fontSize: "16px",
+              lineHeight: "100%",
+              color: "#FFFFFF",
+              backgroundColor: "#8338EC",
+              width: "268px",
+              height: "40px",
+            }}
+          >
+            <span style={{ fontSize: "20px", marginRight: "4px" }}>+</span>{" "}
+            შექმენი ახალი დავალება
+          </Button>
+        </Link>
       </Box>
     </Box>
   );
