@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
+import Card from "@/components/Card";
 
 interface TaskStatus {
   id: number;
@@ -143,6 +144,10 @@ const TaskPage = () => {
             </Typography>
           </Box>
         ))}
+      </Box>
+
+      <Box>
+        <Card />
       </Box>
     </Box>
   );
