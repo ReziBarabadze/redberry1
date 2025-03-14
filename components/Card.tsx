@@ -1,17 +1,24 @@
+"use client";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
-
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { useRouter } from "next/navigation";
 const Card = () => {
+  const router = useRouter();
+
   return (
     <Box
       sx={{
         width: "300px",
         height: "217px",
         borderRadius: "15px",
-        border: "1px solid black",
+        border: "1px solid",
+        borderColor: "#F7BC30",
         padding: "10px",
+        cursor: "pointer",
       }}
+      onClick={() => router.push("/taskinside")}
     >
       <Box>
         {/* TOP */}
@@ -32,7 +39,6 @@ const Card = () => {
                 borderRadius: "4px",
                 width: "86px",
                 padding: "4px",
-                cursor: "pointer",
               }}
             >
               <Image
@@ -62,7 +68,6 @@ const Card = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "24px",
-                cursor: "pointer",
               }}
             >
               დიზაინი
@@ -74,7 +79,6 @@ const Card = () => {
               fontFamily: "FiraGO",
               fontWeight: 400,
               color: "#212529",
-              cursor: "default",
             }}
           >
             22 იანვ, 2022
@@ -97,7 +101,7 @@ const Card = () => {
             fontWeight: 500,
             fontSize: "15px",
             color: "#212529",
-            textAlign: "center",
+            textAlign: "start",
             marginBottom: "7px",
           }}
         >
@@ -107,6 +111,20 @@ const Card = () => {
           შექმენი საიტის მთავარი გვერდი, რომელიც მოიცავს მთავარ სექციებს,
           ნავიგაციას.
         </Typography>
+      </Box>
+      {/* BOTTOM */}
+      <Box
+        sx={{
+          marginTop: "8px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Image src="/images/user.png" alt="user-img" width={30} height={30} />
+        <Box sx={{ display: "flex" }}>
+          <ChatBubbleOutlineIcon sx={{ marginRight: "4px" }} />
+          <Typography>8</Typography>
+        </Box>
       </Box>
     </Box>
   );
