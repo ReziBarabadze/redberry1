@@ -321,7 +321,7 @@ const TaskInside = () => {
               justifyContent: "center",
             }}
           >
-            3
+            1
           </Typography>
         </Box>
         <Box
