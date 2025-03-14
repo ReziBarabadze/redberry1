@@ -5,6 +5,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
 import Card from "@/components/Card";
 import DepartmentsSelector from "@/components/DepartmentsSelector";
+import PriritySelector from "@/components/PrioritySelector";
 
 interface Status {
   id: number;
@@ -14,6 +15,7 @@ interface Status {
 const TaskPage = () => {
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [departamentOpen, setDepartamentOpen] = useState(false);
+  const [prioritySelector, setPrioritySelector] = useState(false);
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -93,6 +95,7 @@ const TaskPage = () => {
           </Typography>
           {departamentOpen && <DepartmentsSelector />}
           <Typography
+            onClick={() => setPrioritySelector(!prioritySelector)}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -104,6 +107,7 @@ const TaskPage = () => {
           >
             პრიორიტეტი <KeyboardArrowDownIcon />
           </Typography>
+          {prioritySelector && <PriritySelector />}
           <Typography
             sx={{
               display: "flex",
