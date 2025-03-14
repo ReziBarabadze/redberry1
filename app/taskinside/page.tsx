@@ -8,7 +8,7 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Reply from "@/components/Reply";
 
-const page = () => {
+const TaskInside = () => {
   const [showReply, setShowReply] = useState(false);
   return (
     <Box
@@ -373,4 +373,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default TaskInside;
