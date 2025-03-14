@@ -4,14 +4,16 @@ import React, { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
 import Card from "@/components/Card";
+import DepartmentsSelector from "@/components/DepartmentsSelector";
 
-interface TaskStatus {
+interface Status {
   id: number;
   name: string;
 }
 
 const TaskPage = () => {
-  const [statuses, setStatuses] = useState<TaskStatus[]>([]);
+  const [statuses, setStatuses] = useState<Status[]>([]);
+  const [departamentOpen, setDepartamentOpen] = useState(false);
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -73,9 +75,11 @@ const TaskPage = () => {
             alignItems: "center",
             justifyContent: "space-between",
             paddingInline: "18px",
+            position: "relative",
           }}
         >
           <Typography
+            onClick={() => setDepartamentOpen(!departamentOpen)}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -87,6 +91,7 @@ const TaskPage = () => {
           >
             დეპარტამენტი <KeyboardArrowDownIcon />
           </Typography>
+          {departamentOpen && <DepartmentsSelector />}
           <Typography
             sx={{
               display: "flex",
