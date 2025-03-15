@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+const nextConfig = {
+  images: {
+    domains: ["momentum.redberryinternship.ge"],
 
-const nextConfig: NextConfig = {
-  /* config options here */
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "momentum.redberryinternship.ge",
+        pathname: "/storage/**",
+      },
+    ],
+  },
 };
-
-export default nextConfig;
+module.exports = nextConfig;

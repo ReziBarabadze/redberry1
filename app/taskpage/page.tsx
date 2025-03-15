@@ -6,6 +6,7 @@ import axios from "axios";
 import Card from "@/components/Card";
 import DepartmentsSelector from "@/components/DepartmentsSelector";
 import PriritySelector from "@/components/PrioritySelector";
+import Employee from "@/components/Employee";
 
 interface Status {
   id: number;
@@ -16,7 +17,7 @@ const TaskPage = () => {
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [departamentOpen, setDepartamentOpen] = useState(false);
   const [prioritySelector, setPrioritySelector] = useState(false);
-  // const [employee, setEmployee] = useState(false);
+  const [employee, setEmployee] = useState(false);
 
   const departmentClick = () => {
     setDepartamentOpen(!departamentOpen);
@@ -28,10 +29,10 @@ const TaskPage = () => {
     setDepartamentOpen(false);
   };
 
-  // const employeeClick = () => {
-  //   setDepartamentOpen(!employee);
-  //   setPrioritySelector(false);
-  // };
+  const employeeClick = () => {
+    setEmployee(!employee);
+    setPrioritySelector(false);
+  };
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -125,7 +126,7 @@ const TaskPage = () => {
           </Typography>
           {prioritySelector && <PriritySelector />}
           <Typography
-            // onClick={employee}
+            onClick={employeeClick}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -137,7 +138,7 @@ const TaskPage = () => {
           >
             თანამშრომელი <KeyboardArrowDownIcon />
           </Typography>
-          {/* {employee && <EmployeeSelector />} */}
+          {employee && <Employee />}
         </Box>
       </Box>
       {/* CARDS BOX */}
