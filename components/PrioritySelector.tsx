@@ -1,5 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
 import axios from "axios";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface Department {
@@ -38,7 +39,7 @@ const PriritySelector = () => {
     <Box
       sx={{
         width: "688px",
-        minHeight: "274px",
+        minHeight: "220px",
         position: "absolute",
         top: "100%",
         right: "0.25px",
@@ -59,7 +60,7 @@ const PriritySelector = () => {
           display: "flex",
           flexDirection: "column",
           gap: "2px",
-          width: "400px",
+          width: "150px",
         }}
       >
         {priority.map((prio) => (
@@ -71,7 +72,12 @@ const PriritySelector = () => {
                 onChange={() => priorityChange(prio.id)}
               />
             }
-            label={prio.name}
+            label={
+              <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <Image src={prio.icon} alt={prio.name} width={16} height={18} />
+                {prio.name}
+              </Box>
+            }
             sx={{
               "& .MuiFormControlLabel-label": {
                 fontFamily: "FiraGO",

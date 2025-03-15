@@ -16,6 +16,22 @@ const TaskPage = () => {
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [departamentOpen, setDepartamentOpen] = useState(false);
   const [prioritySelector, setPrioritySelector] = useState(false);
+  // const [employee, setEmployee] = useState(false);
+
+  const departmentClick = () => {
+    setDepartamentOpen(!departamentOpen);
+    setPrioritySelector(false);
+  };
+
+  const priorityClick = () => {
+    setPrioritySelector(!prioritySelector);
+    setDepartamentOpen(false);
+  };
+
+  // const employeeClick = () => {
+  //   setDepartamentOpen(!employee);
+  //   setPrioritySelector(false);
+  // };
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -81,7 +97,7 @@ const TaskPage = () => {
           }}
         >
           <Typography
-            onClick={() => setDepartamentOpen(!departamentOpen)}
+            onClick={departmentClick}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -95,7 +111,7 @@ const TaskPage = () => {
           </Typography>
           {departamentOpen && <DepartmentsSelector />}
           <Typography
-            onClick={() => setPrioritySelector(!prioritySelector)}
+            onClick={priorityClick}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -109,6 +125,7 @@ const TaskPage = () => {
           </Typography>
           {prioritySelector && <PriritySelector />}
           <Typography
+            // onClick={employee}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -120,6 +137,7 @@ const TaskPage = () => {
           >
             თანამშრომელი <KeyboardArrowDownIcon />
           </Typography>
+          {/* {employee && <EmployeeSelector />} */}
         </Box>
       </Box>
       {/* CARDS BOX */}

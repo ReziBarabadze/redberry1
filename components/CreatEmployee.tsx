@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import DepartmentsSelector from "./DepartmentsSelector";
 
 interface Props {
   setOpenPopup: (open: boolean) => void;
@@ -12,12 +13,30 @@ interface Props {
 
 const CreatEmployee = ({ setOpenPopup }: Props) => {
   const [hasImage, setHasImage] = useState(true);
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
   const deleteImage = () => {
     setHasImage(false);
   };
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          position: "relative",
+        }}
+      >
+        {isDepartmentOpen && (
+          <Box
+            sx={{
+              position: "absolute",
+              left: "655px",
+              top: "52px",
+            }}
+          >
+            <DepartmentsSelector />
+          </Box>
+        )}
         <Image
           src="/images/X.png"
           alt="icon"
@@ -190,7 +209,7 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                {hasImage ? (
+                {!hasImage ? (
                   <Box
                     sx={{
                       position: "relative",
@@ -267,8 +286,17 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                   justifyContent: "flex-end",
                   cursor: "pointer",
                 }}
+                onClick={() => setIsDepartmentOpen(!isDepartmentOpen)}
               >
-                <KeyboardArrowDownIcon sx={{ color: "#343A40" }} />
+                <KeyboardArrowDownIcon
+                  sx={{
+                    color: "#343A40",
+                    transform: isDepartmentOpen
+                      ? "rotate(180deg)"
+                      : "rotate(0deg)",
+                    transition: "0.3s",
+                  }}
+                />
               </Box>
             </Box>
             <Box
