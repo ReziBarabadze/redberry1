@@ -8,8 +8,63 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Reply from "@/components/Reply";
 
+interface Reply {
+  id: number;
+  name: string;
+  message: string;
+  avatarUrl: string;
+}
+interface Comment {
+  id: number;
+  name: string;
+  message: string;
+  avatarUrl: string;
+  replies?: Reply[];
+}
+
 const TaskInside = () => {
   const [showReply, setShowReply] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [newReply, setNewReply] = useState("");
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  const handleAddComment = () => {
+    if (newComment.trim()) {
+      const comment: Comment = {
+        id: comments.length + 1,
+        name: "მიმდინარე მომხმარებელი დროებით !!!",
+        message: newComment,
+        avatarUrl: "/images/user.png",
+        replies: [],
+      };
+      setComments([...comments, comment]);
+      setNewComment("");
+    }
+  };
+
+  const handleAddReply = (commentId: number) => {
+    if (newReply.trim()) {
+      const updatedComments = comments.map((comment) => {
+        if (comment.id === commentId) {
+          const reply: Reply = {
+            id: (comment.replies?.length || 0) + 1,
+            name: "mimdinare momxmarebeli",
+            message: newReply,
+            avatarUrl: "/images/user.png",
+          };
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), reply],
+          };
+        }
+        return comment;
+      });
+      setComments(updatedComments);
+      setNewReply("");
+      setShowReply(false);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -250,6 +305,8 @@ const TaskInside = () => {
       >
         <Box sx={{ position: "relative", marginBottom: "66px" }}>
           <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
             placeholder="დაწერე კომენტარი"
             style={{
               resize: "none",
@@ -260,8 +317,9 @@ const TaskInside = () => {
               padding: "18px",
               outline: "none",
             }}
-          ></textarea>
+          />
           <Button
+            onClick={handleAddComment}
             sx={{
               position: "absolute",
               right: 10,
@@ -321,53 +379,78 @@ const TaskInside = () => {
               justifyContent: "center",
             }}
           >
-            1
+            <span>{comments.length}</span>
           </Typography>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             width: "100%",
             height: "120px",
             display: "flex",
             gap: "12px",
           }}
-        >
-          <Image src="/images/user2.png" alt="img" width={38} height={38} />
-          <Box>
-            <Typography
-              sx={{
-                fontFamily: "FiraGO",
-                fontWeight: 500,
-                fontSize: "18px",
-                color: "#212529",
-              }}
-            >
-              ემილია მორგანი
-            </Typography>
-            <Typography
-              sx={{
-                marginBlock: "8px 10px",
-                fontFamily: "FiraGO",
-                fontWeight: 350,
-                fontSize: "16px",
-                color: "#343A40",
-              }}
-            >
-              დიზაინი სუფთად ჩანს, მაგრამ კოდირებისას მნიშვნელოვანი იქნება, რომ
-              ელემენტებს ჰქონდეს შესაბამისი რეზოლუცია.
-            </Typography>
-
-            <Image
-              src="/images/reply.png"
-              alt="icon"
-              width={67}
-              height={26}
-              style={{ cursor: "pointer" }}
-              onClick={() => setShowReply(!showReply)}
-            />
-          </Box>
-        </Box>
-        {showReply && <Reply />}
+        > */}
+        {comments.length > 0 &&
+          comments.map((comment) => (
+            <Box key={comment.id}>
+              <Box sx={{ display: "flex", gap: "12px" }}>
+                <Image
+                  src={comment.avatarUrl}
+                  alt="user"
+                  width={38}
+                  height={38}
+                />
+                <Box>
+                  <Typography>{comment.name}</Typography>
+                  <Typography>{comment.message}</Typography>
+                  <Image
+                    src="/images/reply.png"
+                    alt="reply"
+                    width={67}
+                    height={26}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowReply(!showReply)}
+                  />
+                </Box>
+              </Box>
+              {showReply && (
+                <Box sx={{ marginLeft: "50px" }}>
+                  <textarea
+                    value={newReply}
+                    onChange={(e) => setNewReply(e.target.value)}
+                    placeholder="დაწერე პასუხი"
+                    style={{
+                      resize: "none",
+                      width: "100%",
+                      height: "100px",
+                      border: "0.3px solid #DDD2FF",
+                      borderRadius: "10px",
+                      padding: "18px",
+                      marginTop: "10px",
+                    }}
+                  />
+                  <Button
+                    onClick={() => handleAddReply(comment.id)}
+                    sx={{
+                      backgroundColor: "#8338EC",
+                      color: "white",
+                      marginTop: "10px",
+                    }}
+                  >
+                    პასუხის გაგზავნა
+                  </Button>
+                </Box>
+              )}
+              {comment.replies?.map((reply) => (
+                <Reply
+                  key={reply.id}
+                  name={reply.name}
+                  message={reply.message}
+                  avatarUrl={reply.avatarUrl}
+                />
+              ))}
+            </Box>
+          ))}
       </Box>
     </Box>
   );

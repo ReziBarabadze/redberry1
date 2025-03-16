@@ -44,6 +44,7 @@ const Header = () => {
               alt="icon"
               width={38}
               height={38}
+              priority
             />
           </Box>
         </Link>

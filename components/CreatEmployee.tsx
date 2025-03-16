@@ -354,6 +354,10 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                     <KeyboardArrowDownIcon
                       sx={{
                         color: "#343A40",
+                        transform: isDepartmentOpen
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                        transition: "0.3s",
                       }}
                     />
                   </Box>

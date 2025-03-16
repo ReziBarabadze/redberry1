@@ -4,16 +4,12 @@ import Image from "next/image";
 import React from "react";
 
 interface ReplayProps {
-  name?: string;
-  message?: string;
+  name: string;
+  message: string;
   avatarUrl: string;
 }
 
-const Reply = ({
-  name = "ნატალია გელოვანი",
-  message = "დიზაინი სუფთად ჩანს, მაგრამ კოდირებისას მნიშვნელოვანი იქნება.",
-  avatarUrl = "/images/replyimage.png",
-}: ReplayProps) => {
+const Reply: React.FC<ReplayProps> = ({ name, message, avatarUrl }) => {
   return (
     <Box
       component="article"
@@ -25,7 +21,13 @@ const Reply = ({
         alignItems: "flex-start",
       }}
     >
-      <Image src={avatarUrl} alt="img" width={38} height={38} />
+      <Image
+        src={avatarUrl}
+        alt="img"
+        width={38}
+        height={38}
+        style={{ borderRadius: "50%" }}
+      />
       <Box component="div">
         <Typography
           component="h3"
