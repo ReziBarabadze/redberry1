@@ -6,19 +6,106 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DepartmentsSelector from "./DepartmentsSelector";
+import axios from "axios";
 
 interface Props {
   setOpenPopup: (open: boolean) => void;
 }
 
+interface FormErrors {
+  name?: string;
+  lastname?: string;
+  avatar?: string;
+  department?: string;
+}
+
 const CreatEmployee = ({ setOpenPopup }: Props) => {
-  const [hasImage, setHasImage] = useState(true);
-  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<number | null>(
+    null
+  );
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const deleteImage = () => {
-    setHasImage(false);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {};
+    if (name.length < 2) {
+      newErrors.name = "მინიმუმ 2 სიმბოლო";
+    }
+    if (name.length > 255) {
+      newErrors.name = "მაქსიმუმ 225 სიმბოლო";
+    }
+    if (lastname.length < 2) {
+      newErrors.lastname = "მინიმუმ 2 სიმბოლო";
+    }
+    if (lastname.length > 255) {
+      newErrors.lastname = "მაქსიმუმ 225 სიმბოლო";
+    }
+    if (!avatar) {
+      newErrors.avatar = "ატვირთე ფოტო";
+    }
+
+    if (!selectedDepartment) {
+      newErrors.department = "აირჩიეთ დეპარტამენტი";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("surname", lastname);
+    if (selectedDepartment) {
+      formData.append("department_id", selectedDepartment.toString());
+    }
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
+    try {
+      const response = await axios.post(
+        "https://momentum.redberryinternship.ge/api/employees",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        setOpenPopup(false);
+      }
+    } catch (error) {
+      console.error("Error", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <Box>
@@ -37,7 +124,10 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
               top: "52px",
             }}
           >
-            <DepartmentsSelector />
+            <DepartmentsSelector
+              setSelectedDepartment={setSelectedDepartment}
+              setIsDepartmentOpen={setIsDepartmentOpen}
+            />
           </Box>
         )}
         <Image
@@ -62,7 +152,7 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
         თანამშრომლის დამატება
       </Typography>
       <Box sx={{ height: "100%", width: "100%" }}>
-        <form>
+        <form onSubmit={handleSubmit}>
           <Box
             sx={{
               display: "flex",
@@ -87,51 +177,22 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
               <input
                 type="text"
                 value={name}
-                onChange={(event) => {
-                  setName(event.target.value);
+                onChange={(e) => {
+                  setName(e.target.value);
                 }}
                 style={{
                   outline: "none",
                   padding: "10px",
                   height: "42px",
                   borderRadius: "6px",
-                  border: "1px solid #CED4DA",
+                  border: errors.name ? "1px solid red " : "1px solid #CED4DA",
                 }}
               />
-              <Box>
-                <small
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    fontFamily: "FiraGO",
-                    fontWeight: 350,
-                    fontSize: "10px",
-                    color: "#6C757D",
-                  }}
-                >
-                  <span>
-                    <KeyboardArrowDownIcon />
-                  </span>
-                  მინიმუმ 2 სიმბოლო
-                </small>
-                <small
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    fontFamily: "FiraGO",
-                    fontWeight: 350,
-                    fontSize: "10px",
-                    color: "#6C757D",
-                  }}
-                >
-                  <span>
-                    <KeyboardArrowDownIcon />
-                  </span>
-                  მინიმუმ 255 სიმბოლო
-                </small>
-              </Box>
+              {errors.name && (
+                <Typography sx={{ color: "error", fontSize: "12px" }}>
+                  {errors.name}
+                </Typography>
+              )}
             </Box>
             <Box
               sx={{ display: "flex", flexDirection: "column", width: "280px" }}
@@ -150,51 +211,24 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
               <input
                 type="text"
                 value={lastname}
-                onChange={(event) => {
-                  setLastname(event.target.value);
+                onChange={(e) => {
+                  setLastname(e.target.value);
                 }}
                 style={{
                   outline: "none",
                   padding: "10px",
                   height: "42px",
                   borderRadius: "6px",
-                  border: "1px solid #CED4DA",
+                  border: errors.lastname
+                    ? "1px solid red"
+                    : "1px solid #CED4DA",
                 }}
               />
-              <Box>
-                <small
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    fontFamily: "FiraGO",
-                    fontWeight: 350,
-                    fontSize: "10px",
-                    color: "#6C757D",
-                  }}
-                >
-                  <span>
-                    <KeyboardArrowDownIcon />
-                  </span>
-                  მინიმუმ 2 სიმბოლო
-                </small>
-                <small
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    fontFamily: "FiraGO",
-                    fontWeight: 350,
-                    fontSize: "10px",
-                    color: "#6C757D",
-                  }}
-                >
-                  <span>
-                    <KeyboardArrowDownIcon />
-                  </span>
-                  მინიმუმ 255 სიმბოლო
-                </small>
-              </Box>
+              {errors.lastname && (
+                <Typography sx={{ color: "error", fontSize: "12px" }}>
+                  {errors.lastname}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Box>
@@ -212,7 +246,9 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
             <Box>
               <Box
                 sx={{
-                  border: "1px dashed #CED4DA",
+                  border: errors.avatar
+                    ? "1px dashed red"
+                    : "1px dashed #CED4DA",
                   borderRadius: "8px",
                   height: "120px",
                   display: "flex",
@@ -220,133 +256,163 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                   justifyContent: "center",
                 }}
               >
-                {!hasImage ? (
-                  <Box
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                  id="avatar-upload"
+                />
+                <label htmlFor="avatar-upload">
+                  {avatarPreview ? (
+                    <Box
+                      sx={{
+                        position: "relative",
+                      }}
+                    >
+                      <Image
+                        src={avatarPreview}
+                        alt="preview"
+                        width={88}
+                        height={88}
+                        style={{ borderRadius: "50%", objectFit: "cover" }}
+                      />
+                      <DeleteForeverIcon
+                        onClick={() => {
+                          setAvatar(null);
+                          setAvatarPreview("");
+                        }}
+                        sx={{
+                          padding: "5px",
+                          border: "0.3px solid #6C757D",
+                          borderRadius: "50%",
+                          color: "#6C757D",
+                          backgroundColor: "#FFF",
+                          position: "absolute",
+                          zIndex: 3,
+                          cursor: "pointer",
+                          bottom: 0,
+                          right: 0,
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Box>
+                        <AddPhotoAlternateIcon sx={{ color: "#343A40" }} />
+                        <Typography
+                          sx={{
+                            fontFamily: "FiraGO",
+                            fontWeight: 400,
+                            fontSize: "14px",
+                            color: "#0D0F10",
+                          }}
+                        >
+                          ატვირთე ფოტო
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                </label>
+              </Box>
+              {errors.avatar && (
+                <Typography sx={{ color: "error.main", fontSize: "12px" }}>
+                  {errors.avatar}
+                </Typography>
+              )}
+              <Box>
+                <Box sx={{ marginBlock: "20px 10px" }}>
+                  <Typography
                     sx={{
-                      position: "relative",
+                      marginBottom: "3px",
+                      fontFamily: "FiraGO",
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "#343A40",
                     }}
                   >
-                    <Image
-                      src="/images/yser2png.png"
-                      alt="img"
-                      width={88}
-                      height={88}
-                    />
-                    <DeleteForeverIcon
-                      onClick={deleteImage}
+                    დეპარტამენტი*
+                  </Typography>
+                  <Box
+                    sx={{
+                      border: errors.department
+                        ? "1px solid red"
+                        : "1px solid #CED4DA",
+                      width: "300px",
+                      height: "42px",
+                      borderRadius: "6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setIsDepartmentOpen(!isDepartmentOpen)}
+                  >
+                    <KeyboardArrowDownIcon
                       sx={{
-                        padding: "5px",
-                        border: "0.3px solid #6C757D",
-                        borderRadius: "50%",
-                        color: "#6C757D",
-                        backgroundColor: "#FFF",
-                        position: "absolute",
-                        zIndex: 3,
-                        cursor: "pointer",
-                        bottom: 0,
-                        right: 0,
+                        color: "#343A40",
+                        transform: isDepartmentOpen
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                        transition: "0.3s",
                       }}
                     />
                   </Box>
-                ) : (
-                  <Box
+                  {errors.department && (
+                    <Typography sx={{ color: "error.main", fontSize: " 12px" }}>
+                      {errors.department}
+                    </Typography>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    disabled={isSubmitting}
                     sx={{
-                      display: "flex",
-                      textAlign: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
+                      width: "100px",
+                      height: "40px",
+                      border: "1px solid #8338EC",
+                      borderRadius: "5px",
+                      color: "#343A40",
+                      fontFamily: "FiraGO",
+                      fontWeight: 400,
+                      fontSize: "16px",
+                    }}
+                    onClick={() => setOpenPopup(false)}
+                  >
+                    გაუქმება
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    sx={{
+                      width: "263px",
+                      height: "40px",
+                      backgroundColor: "#8338EC",
+                      color: "#FFFFFF",
+                      fontFamily: "FiraGO",
+                      fontWeight: 400,
+                      fontSize: "16px",
                     }}
                   >
-                    <Box>
-                      <AddPhotoAlternateIcon sx={{ color: "#343A40" }} />
-                      <Typography
-                        sx={{
-                          fontFamily: "FiraGO",
-                          fontWeight: 400,
-                          fontSize: "14px",
-                          color: "#0D0F10",
-                        }}
-                      >
-                        ატვირთე ფოტო
-                      </Typography>
-                    </Box>
-                  </Box>
-                )}
+                    {isSubmitting ? "იგზავნება..." : "დაამატე თანამშრომელი"}
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-            <Box sx={{ marginBlock: "20px 10px" }}>
-              <Typography
-                sx={{
-                  marginBottom: "3px",
-                  fontFamily: "FiraGO",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "#343A40",
-                }}
-              >
-                დეპარტამენტი*
-              </Typography>
-              <Box
-                sx={{
-                  border: "1px solid #CED4DA",
-                  width: "300px",
-                  height: "42px",
-                  borderRadius: "6px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  cursor: "pointer",
-                }}
-                onClick={() => setIsDepartmentOpen(!isDepartmentOpen)}
-              >
-                <KeyboardArrowDownIcon
-                  sx={{
-                    color: "#343A40",
-                    transform: isDepartmentOpen
-                      ? "rotate(180deg)"
-                      : "rotate(0deg)",
-                    transition: "0.3s",
-                  }}
-                />
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                gap: "12px",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                marginTop: "20px",
-              }}
-            >
-              <Button
-                sx={{
-                  width: "100px",
-                  height: "40px",
-                  border: "1px solid #8338EC",
-                  borderRadius: "5px",
-                  color: "#343A40",
-                  fontFamily: "FiraGO",
-                  fontWeight: 400,
-                  fontSize: "16px",
-                }}
-                onClick={() => setOpenPopup(false)}
-              >
-                გაუქმება
-              </Button>
-              <Button
-                sx={{
-                  width: "263px",
-                  height: "40px",
-                  backgroundColor: "#8338EC",
-                  color: "#FFFFFF",
-                  fontFamily: "FiraGO",
-                  fontWeight: 400,
-                  fontSize: "16px",
-                }}
-              >
-                დაამატე თანამშრომელი
-              </Button>
             </Box>
           </Box>
         </form>

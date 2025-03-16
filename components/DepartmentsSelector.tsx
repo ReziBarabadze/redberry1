@@ -1,13 +1,22 @@
+"use client";
 import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+
+interface DepartmentsSelectorProps {
+  setSelectedDepartment: (department: number | null) => void;
+  setIsDepartmentOpen: (isOpen: boolean) => void;
+}
 
 interface Department {
   id: number;
   name: string;
 }
 
-const DepartmentsSelector = () => {
+const DepartmentsSelector = ({
+  setSelectedDepartment,
+  setIsDepartmentOpen,
+}: DepartmentsSelectorProps) => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartments, setSelectedDepartments] = useState<number[]>([]);
 
@@ -31,6 +40,12 @@ const DepartmentsSelector = () => {
         ? prev.filter((id) => id !== departmentId)
         : [...prev, departmentId]
     );
+  };
+
+  const handleSelection = () => {
+    const selectedDepartment = selectedDepartments[0] || null;
+    setSelectedDepartment(selectedDepartment);
+    setIsDepartmentOpen(false);
   };
 
   return (
@@ -91,6 +106,7 @@ const DepartmentsSelector = () => {
         }}
       >
         <Button
+          onClick={handleSelection}
           sx={{
             fontFamily: "FiraGO",
             fontWeight: 400,
