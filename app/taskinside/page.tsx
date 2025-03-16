@@ -23,10 +23,19 @@ interface Comment {
 }
 
 const TaskInside = () => {
-  const [showReply, setShowReply] = useState(false);
+  const [showReplyIds, setShowReplyIds] = useState<{ [key: number]: boolean }>(
+    {}
+  );
   const [newComment, setNewComment] = useState("");
   const [newReply, setNewReply] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
+
+  const toggleReply = (commentId: number) => {
+    setShowReplyIds((prev) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }));
+  };
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -61,7 +70,10 @@ const TaskInside = () => {
       });
       setComments(updatedComments);
       setNewReply("");
-      setShowReply(false);
+      setShowReplyIds((prev) => ({
+        ...prev,
+        [commentId]: false,
+      }));
     }
   };
 
@@ -409,11 +421,11 @@ const TaskInside = () => {
                     width={67}
                     height={26}
                     style={{ cursor: "pointer" }}
-                    onClick={() => setShowReply(!showReply)}
+                    onClick={() => toggleReply(comment.id)}
                   />
                 </Box>
               </Box>
-              {showReply && (
+              {showReplyIds[comment.id] && (
                 <Box sx={{ marginLeft: "50px" }}>
                   <textarea
                     value={newReply}
