@@ -46,13 +46,13 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
   const validateForm = () => {
     const newErrors: FormErrors = {};
     if (name.length < 2) {
-      newErrors.name = "მინიმუმ 2 სიმბოლო";
+      newErrors.name = "მაქსიმუმ 2 სიმბოლო";
     }
     if (name.length > 255) {
       newErrors.name = "მაქსიმუმ 225 სიმბოლო";
     }
     if (lastname.length < 2) {
-      newErrors.lastname = "მინიმუმ 2 სიმბოლო";
+      newErrors.lastname = "მაქსიმუმ 2 სიმბოლო";
     }
     if (lastname.length > 255) {
       newErrors.lastname = "მაქსიმუმ 225 სიმბოლო";

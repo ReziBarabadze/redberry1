@@ -18,6 +18,16 @@ const TaskPage = () => {
   const [departamentOpen, setDepartamentOpen] = useState(false);
   const [prioritySelector, setPrioritySelector] = useState(false);
   const [employee, setEmployee] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (selectedDepartment !== null) {
+      // აქ გადაყვება ყველა ინფო ინსაიდში
+      console.log(`არჩეული დეპარტამენტის id:  ${selectedDepartment}`);
+    }
+  }, [selectedDepartment]);
 
   const departmentClick = () => {
     setDepartamentOpen(!departamentOpen);
@@ -108,9 +118,15 @@ const TaskPage = () => {
               fontFamily: "FiraGO",
             }}
           >
-            დეპარტამენტი <KeyboardArrowDownIcon />
+            {selectedDepartment ? "არჩეული დეპარტამენტი" : "დეპარტამენტი"}{" "}
+            <KeyboardArrowDownIcon />
           </Typography>
-          {departamentOpen && <DepartmentsSelector />}
+          {departamentOpen && (
+            <DepartmentsSelector
+              setSelectedDepartment={setSelectedDepartment}
+              setIsDepartmentOpen={setDepartamentOpen}
+            />
+          )}
           <Typography
             onClick={priorityClick}
             sx={{
