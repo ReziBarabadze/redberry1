@@ -31,7 +31,7 @@ const Employee = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_MY_TOKEN}`,
             },
           }
         );

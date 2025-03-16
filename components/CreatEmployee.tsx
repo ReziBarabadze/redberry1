@@ -93,7 +93,7 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MY_TOKEN}`,
           },
         }
       );
