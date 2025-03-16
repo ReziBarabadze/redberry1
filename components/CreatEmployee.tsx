@@ -14,6 +14,9 @@ interface Props {
 const CreatEmployee = ({ setOpenPopup }: Props) => {
   const [hasImage, setHasImage] = useState(true);
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+
   const deleteImage = () => {
     setHasImage(false);
   };
@@ -83,6 +86,10 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
               </label>
               <input
                 type="text"
+                value={name}
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
                 style={{
                   outline: "none",
                   padding: "10px",
@@ -142,6 +149,10 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
               </label>
               <input
                 type="text"
+                value={lastname}
+                onChange={(event) => {
+                  setLastname(event.target.value);
+                }}
                 style={{
                   outline: "none",
                   padding: "10px",

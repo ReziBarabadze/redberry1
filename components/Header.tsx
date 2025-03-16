@@ -27,6 +27,7 @@ const Header = () => {
         <Link href="/taskpage" style={{ textDecoration: "none" }}>
           <Box sx={{ display: "flex", cursor: "pointer" }}>
             <Typography
+              component="span"
               sx={{
                 fontFamily: "Fredoka One",
                 fontWeight: 400,
@@ -39,7 +40,7 @@ const Header = () => {
               Momentum
             </Typography>
             <Image
-              src="images/Hourglass.svg"
+              src="/images/Hourglass.svg"
               alt="icon"
               width={38}
               height={38}

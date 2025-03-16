@@ -1,3 +1,4 @@
+"use client";
 import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
@@ -12,9 +13,11 @@ interface Department {
 const PriritySelector = () => {
   const [priority, setPriority] = useState<Department[]>([]);
   const [selectedPriority, setSelectedPriority] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchDepartments = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           "https://momentum.redberryinternship.ge/api/priorities"
@@ -22,6 +25,8 @@ const PriritySelector = () => {
         setPriority(response.data);
       } catch (error) {
         console.error("Error fetching departments", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchDepartments();
@@ -63,31 +68,40 @@ const PriritySelector = () => {
           width: "150px",
         }}
       >
-        {priority.map((prio) => (
-          <FormControlLabel
-            key={prio.id}
-            control={
-              <Checkbox
-                checked={selectedPriority.includes(prio.id)}
-                onChange={() => priorityChange(prio.id)}
-              />
-            }
-            label={
-              <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                <Image src={prio.icon} alt={prio.name} width={16} height={18} />
-                {prio.name}
-              </Box>
-            }
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontFamily: "FiraGO",
-                fontWeight: 400,
-                fontSize: "16px",
-                color: "#212529",
-              },
-            }}
-          />
-        ))}
+        {isLoading ? (
+          <Box>Loading...</Box>
+        ) : (
+          priority.map((prio) => (
+            <FormControlLabel
+              key={prio.id}
+              control={
+                <Checkbox
+                  checked={selectedPriority.includes(prio.id)}
+                  onChange={() => priorityChange(prio.id)}
+                />
+              }
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                  <Image
+                    src={prio.icon}
+                    alt={prio.name}
+                    width={16}
+                    height={18}
+                  />
+                  {prio.name}
+                </Box>
+              }
+              sx={{
+                "& .MuiFormControlLabel-label": {
+                  fontFamily: "FiraGO",
+                  fontWeight: 400,
+                  fontSize: "16px",
+                  color: "#212529",
+                },
+              }}
+            />
+          ))
+        )}
       </Box>
       <Box
         sx={{

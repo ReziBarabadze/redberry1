@@ -1,5 +1,5 @@
 "use client";
-import { CheckBox } from "@mui/icons-material";
+import { Checkbox } from "@mui/material";
 import { Box, Button, Typography } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
@@ -18,12 +18,13 @@ interface Employee {
 
 const Employee = () => {
   const [employee, setEmployee] = useState<Employee[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const [selectedEmployees, setSelectedEmployees] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setMounted(true);
     const fetchEmployees = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           "https://momentum.redberryinternship.ge/api/employees",
           {
@@ -37,11 +38,24 @@ const Employee = () => {
         setEmployee(response.data);
       } catch (error) {
         console.error("Error", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchEmployees();
   }, []);
-  if (!mounted) return null;
+
+  const handleEmployeeSelect = (employeeId: number) => {
+    setSelectedEmployees((prev) =>
+      prev.includes(employeeId)
+        ? prev.filter((id) => id !== employeeId)
+        : [...prev, employeeId]
+    );
+  };
+
+  const handleSelection = () => {
+    console.log("selected employees", selectedEmployees);
+  };
 
   return (
     <Box
@@ -55,8 +69,9 @@ const Employee = () => {
         marginTop: "7px",
         border: "0.5px solid #8338EC",
         borderRadius: "10px",
-        paddingLeft: "20px",
-        paddingTop: "20px",
+        // paddingLeft: "20px",
+        // paddingTop: "20px",
+        padding: "20px",
         backgroundColor: "#ffff",
         display: "flex",
         flexDirection: "column",
@@ -71,9 +86,13 @@ const Employee = () => {
           width: "150px",
         }}
       >
-        {employee.map((item) => (
-          <Box key={item.id}>
+        {isLoading ? (
+          <Box>Loading...</Box>
+        ) : (
+          employee.map((item) => (
             <Box
+              key={item.id}
+              onClick={() => handleEmployeeSelect(item.id)}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -82,7 +101,14 @@ const Employee = () => {
                 cursor: "pointer",
               }}
             >
-              <CheckBox />
+              <Checkbox
+                sx={{ marginBottom: "15px" }}
+                checked={selectedEmployees.includes(item.id)}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  handleEmployeeSelect(item.id);
+                }}
+              />
               <Image
                 src={item.avatar}
                 alt="img"
@@ -93,6 +119,7 @@ const Employee = () => {
                   marginBottom: "15px",
                   objectFit: "cover",
                 }}
+                unoptimized
               />
               <Typography
                 sx={{
@@ -104,8 +131,8 @@ const Employee = () => {
                 }}
               >{`${item.name} ${item.surname}`}</Typography>
             </Box>
-          </Box>
-        ))}
+          ))
+        )}
       </Box>
       <Box
         sx={{
@@ -116,6 +143,7 @@ const Employee = () => {
         }}
       >
         <Button
+          onClick={handleSelection}
           sx={{
             fontFamily: "FiraGO",
             fontWeight: 400,

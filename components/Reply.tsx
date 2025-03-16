@@ -1,20 +1,34 @@
+"use client";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 
-const Reply = () => {
+interface ReplayProps {
+  name?: string;
+  message?: string;
+  avatarUrl: string;
+}
+
+const Reply = ({
+  name = "ნატალია გელოვანი",
+  message = "დიზაინი სუფთად ჩანს, მაგრამ კოდირებისას მნიშვნელოვანი იქნება.",
+  avatarUrl = "/images/replyimage.png",
+}: ReplayProps) => {
   return (
     <Box
+      component="article"
       sx={{
         marginLeft: "50px",
         marginTop: "20px",
         display: "flex",
         gap: "12px",
+        alignItems: "flex-start",
       }}
     >
-      <Image src="/images/replyimage.png" alt="img" width={38} height={38} />
-      <Box>
+      <Image src={avatarUrl} alt="img" width={38} height={38} />
+      <Box component="div">
         <Typography
+          component="h3"
           sx={{
             fontFamily: "FiraGO",
             fontWeight: 500,
@@ -23,9 +37,10 @@ const Reply = () => {
             marginBottom: "8px",
           }}
         >
-          ნატალია გიორგაძე
+          {name}
         </Typography>
         <Typography
+          component="p"
           sx={{
             fontFamily: "FiraGO",
             fontWeight: 350,
@@ -33,7 +48,7 @@ const Reply = () => {
             color: "#021526",
           }}
         >
-          დიზაინი სუფთად ჩანს, მაგრამ კოდირებისას მნიშვნელოვანი იქნება.
+          {message}
         </Typography>
       </Box>
     </Box>
