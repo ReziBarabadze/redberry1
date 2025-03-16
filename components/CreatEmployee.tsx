@@ -246,9 +246,7 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
             <Box>
               <Box
                 sx={{
-                  border: errors.avatar
-                    ? "1px dashed red"
-                    : "1px dashed #CED4DA",
+                  border: "1px dashed #CED4DA",
                   borderRadius: "8px",
                   height: "120px",
                   display: "flex",
@@ -342,9 +340,7 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                   </Typography>
                   <Box
                     sx={{
-                      border: errors.department
-                        ? "1px solid red"
-                        : "1px solid #CED4DA",
+                      border: "1px solid #CED4DA",
                       width: "300px",
                       height: "42px",
                       borderRadius: "6px",
@@ -358,10 +354,6 @@ const CreatEmployee = ({ setOpenPopup }: Props) => {
                     <KeyboardArrowDownIcon
                       sx={{
                         color: "#343A40",
-                        transform: isDepartmentOpen
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
-                        transition: "0.3s",
                       }}
                     />
                   </Box>
