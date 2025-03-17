@@ -25,13 +25,16 @@ const Employee = () => {
     const fetchEmployees = async () => {
       try {
         setIsLoading(true);
+        const token =
+          process.env.NEXT_PUBLIC_MY_TOKEN ||
+          "f05344f9-8547-4553-9a85-4df3d1606505";
         const response = await axios.get(
           "https://momentum.redberryinternship.ge/api/employees",
           {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_MY_TOKEN}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
